@@ -12,11 +12,13 @@ try:
 
     parquet_file = "data_live/analytics.parquet"
 
+    # Total Validated Signups - count
     total_signups = conn.execute(f"SELECT COUNT(*) FROM read_parquet('{parquet_file}')").fetchone()[0]
     st.metric("Total Signups", total_signups)
 
     st.subheader("Signups by Plan Type")
 
+    # Signups grouped by plan_type - bar
     plan_df = conn.execute(
         f"SELECT plan_type, COUNT(*) as signup_count FROM read_parquet('{parquet_file}') GROUP BY plan_type ORDER BY signup_count DESC"
     ).fetchdf()
@@ -25,6 +27,7 @@ try:
 
     st.subheader("Recent Signups")
 
+    # Recent signups - table
     recent_df = conn.execute(
         f"SELECT * FROM read_parquet('{parquet_file}') ORDER BY timestamp DESC LIMIT 100"
     ).fetchdf()
