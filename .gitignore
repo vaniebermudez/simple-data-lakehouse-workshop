@@ -226,3 +226,6 @@ data/
 *.parquet
 *.json
 *.duckdb
+
+# Virtual Environment
+python_data_engineering/
