@@ -1,0 +1,16 @@
+from datetime import datetime
+from typing import Optional
+from pydantic import BaseModel, Field
+
+class BaseEvent(BaseModel):
+    event_id: str = Field(..., description="Unique idenfier for the event")
+    event_name: str = Field(..., description="Standardized event name in dot notation (e.g., 'user.signup').")
+    timestamp: datetime = Field(..., description="UTC timestamp of the event.")
+
+
+class UserSignupEvent(BaseEvent):
+    user_id: int = Field(..., description="Unique ID assigned to the new user.")
+    plan_type: str = Field(..., pattern="^(free|pro|enterprise)$", description="Subscription plan selected during signup.")
+    referral_source: Optional[str] = Field(None, description="Origin of the referral, if applicable.")
+
+

@@ -34,10 +34,9 @@ def generate_events(num_records: int = 50, error_rate: float = 0.05)-> None:
 
             # Sparse Data Simulation
             "referral_source":  None if random.random() < 0.3 else fake.url()
-            }
+        }
         events.append(event)
 
-        return events
 
     data_dir = Path("data_live")
     data_dir.mkdir(exist_ok=True)
