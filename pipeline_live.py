@@ -22,13 +22,12 @@ def load_raw_data(file_path) -> List[Dict[str, Any]]:
 
 def validate_events(raw_events: List[Dict[str, Any]])-> List[UserSignupEvent]:
     valid_events = []
-
-    try:
-        for event in raw_events:
+    for event in raw_events:
+        try:        
             validated_event = UserSignupEvent(**event)
             valid_events.append(validated_event)
-    except ValidationError as e:
-        logging.warning(f"Validation failed for event {event.get('event_id', 'UNKNOWN')}: {e.errors()[0]['msg']}")
+        except ValidationError as e:
+            logging.warning(f"Validation failed for event {event.get('event_id', 'UNKNOWN')}: {e.errors()[0]['msg']}")
 
     return valid_events
 
@@ -41,8 +40,8 @@ def load_to_duckdb(events: List[UserSignupEvent], db_path: str = ":memory:") -> 
     if raw_list:
         validated_data = pd.DataFrame(raw_list) 
 
-        conn.execute("COPY (SELECT * FROM validated_data) TO 'data/analytics.parquet' (FORMAT PARQUET)")
-        logging.info(f"Successfully exported {len(validated_data)} records to data/analytics.parquet.")
+        conn.execute("COPY (SELECT * FROM validated_data) TO 'data_live/analytics.parquet' (FORMAT PARQUET)")
+        logging.info(f"Successfully exported {len(validated_data)} records to data_live/analytics.parquet.")
     else:
         logging.warning("No valid data to load into DuckDB.")
         
